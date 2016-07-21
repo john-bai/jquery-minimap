@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>jquery-miniview demo</title>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script type="text/javascript"
+				src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="jquery-miniview.js"></script>
+		<style>
+			html, body {
+				margin: 0;
+			}
+
+			#parent {
+				position: absolute;
+				height: 100%;
+				width: 100%;
+				overflow: auto;
+			}
+
+			.child {
+				position: absolute;
+				height: 200px;
+				width: 100px;
+				background-color: #AFBBC6;
+				cursor: move;
+			}
+
+			#miniview {
+				position: fixed;
+				width: 125px;
+				height: 125px;
+				top: 20px;
+				right: 20px;
+				background-color: #EEE;
+				border: 1px solid #AAA;
+				opacity: 0.9;
+				z-index: 1;
+			}
+
+			.mini {
+				position: absolute;
+				background-color: rgb(96, 122, 134);
+			}
+
+			.port {
+				position: absolute;
+				box-sizing: border-box;
+				background-color: rgba(79, 111, 126, 0.4);
+				z-index: 1;
+				cursor: move;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="miniview"></div>
+		<div id="parent"></div>
+
+		<script>
+			$( function () {
+				var $parent = $( "#parent" );
+
+				// Add children to the parent.
+				var childrenFragment = document.createDocumentFragment();
+				var left = 0;
+				var top = 0;
+				var $child;
+				for ( var i = 0; i < 15; i++ ) {
+					$child = $( "<div></div>" ).addClass( "child" ).css( { left : left, top : top } );
+					childrenFragment.appendChild( $child[ 0 ] );
+					left += 200;
+					top += 200;
+				}
+				$parent.append( childrenFragment );
+
+				// Allow children to be draggable. The position of the child will be updated in the miniview.
+				var $children = $parent.find( '.child' );
+				$children.each( function () {
+					$( this ).draggable( {
+						containment : $parent,
+						scroll : false
+					} );
+				} );
+
+				// Initialize the miniview plugin.
+				$parent.miniview( $children );
+			} );
+		</script>
+	</body>
+</html>
