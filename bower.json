@@ -1,0 +1,28 @@
+{
+  "name": "jquery-minimap",
+  "main": "jquery-minimap.js",
+  "homepage": "https://github.com/john-bai/jquery-minimap",
+  "authors": [
+    "John Bai <jtherrell@gmail.com>"
+  ],
+  "description": "A jQuery plugin that creates an interactive minimap of a parent element and its children.",
+  "keywords": [
+    "jquery",
+    "minimap",
+    "miniview",
+    "mini",
+    "map",
+    "mapper"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": ">=1.7.0"
+  }
+}
