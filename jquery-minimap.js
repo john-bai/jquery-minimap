@@ -1,33 +1,32 @@
 (function( $ ) {
-	$.fn.miniview = function( children ) {
+	$.fn.minimap = function( $mapSource ) {
 		var x, y, l, t, w, h;
-		var $parent = this;
 		var $window = $( window );
-		var $miniview = $( "#miniview" );
-		var miniviewWidth = $miniview.width();
-		var miniviewHeight = $miniview.height();
-		var $viewport = $( "<div></div>" ).addClass( "port" );
-		$miniview.append( $viewport );
+		var $minimap = this;
+		var minimapWidth = $minimap.width();
+		var minimapHeight = $minimap.height();
+		var $viewport = $( "<div></div>" ).addClass( "minimap-viewport" );
+		$minimap.append( $viewport );
 		synchronize();
 
 		$window.on( "resize", synchronize );
-		$parent.on( "scroll", synchronize );
-		$parent.on( "drag", init );
-		$miniview.on( "mousedown touchstart", down );
+		$mapSource.on( "scroll", synchronize );
+		$mapSource.on( "drag", init );
+		$minimap.on( "mousedown touchstart", down );
 
 		function down( e ) {
 			var moveEvent, upEvent;
-			var pos = $miniview.position();
+			var pos = $minimap.position();
 
 			x = Math.round( pos.left + l + w / 2 );
 			y = Math.round( pos.top + t + h / 2 );
 			move( e );
 
 			if ( e.type === "touchstart" ) {
-				moveEvent = "touchmove.miniviewDown";
+				moveEvent = "touchmove.minimapDown";
 				upEvent = "touchend";
 			} else {
-				moveEvent = "mousemove.miniviewDown";
+				moveEvent = "mousemove.minimapDown";
 				upEvent = "mouseup";
 			}
 			$window.on( moveEvent, move );
@@ -54,11 +53,11 @@
 			if ( t + dy < 0 ) {
 				dy = -t;
 			}
-			if ( l + w + dx > miniviewWidth ) {
-				dx = miniviewWidth - l - w;
+			if ( l + w + dx > minimapWidth ) {
+				dx = minimapWidth - l - w;
 			}
-			if ( t + h + dy > miniviewHeight ) {
-				dy = miniviewHeight - t - h;
+			if ( t + h + dy > minimapHeight ) {
+				dy = minimapHeight - t - h;
 			}
 
 			x += dx;
@@ -67,26 +66,26 @@
 			l += dx;
 			t += dy;
 
-			var coefX = miniviewWidth / $parent[ 0 ].scrollWidth;
-			var coefY = miniviewHeight / $parent[ 0 ].scrollHeight;
+			var coefX = minimapWidth / $mapSource[ 0 ].scrollWidth;
+			var coefY = minimapHeight / $mapSource[ 0 ].scrollHeight;
 			var left = l / coefX;
 			var top = t / coefY;
 
-			$parent[ 0 ].scrollLeft = Math.round( left );
-			$parent[ 0 ].scrollTop = Math.round( top );
+			$mapSource[ 0 ].scrollLeft = Math.round( left );
+			$mapSource[ 0 ].scrollTop = Math.round( top );
 
 			redraw();
 		}
 
 		function up() {
-			$window.off( ".miniviewDown" );
+			$window.off( ".minimapDown" );
 		}
 
 		function synchronize() {
-			var dims = [ $parent.width(), $parent.height() ];
-			var scroll = [ $parent.scrollLeft(), $parent.scrollTop() ];
-			var scaleX = miniviewWidth / $parent[ 0 ].scrollWidth;
-			var scaleY = miniviewHeight / $parent[ 0 ].scrollHeight;
+			var dims = [ $mapSource.width(), $mapSource.height() ];
+			var scroll = [ $mapSource.scrollLeft(), $mapSource.scrollTop() ];
+			var scaleX = minimapWidth / $mapSource[ 0 ].scrollWidth;
+			var scaleY = minimapHeight / $mapSource[ 0 ].scrollHeight;
 
 			var lW = dims[ 0 ] * scaleX;
 			var lH = dims[ 1 ] * scaleY;
@@ -111,19 +110,19 @@
 		}
 
 		function init() {
-			$miniview.find( ".mini" ).remove();
+			$minimap.find( ".minimap-node" ).remove();
 			//creating mini version of the supplied children
-			children.each( function() {
+			$mapSource.children().each( function() {
 				var $child = $( this );
-				var mini = $( "<div></div>" ).addClass( "mini" );
-				$miniview.append( mini );
-				var ratioX = miniviewWidth / $parent[ 0 ].scrollWidth;
-				var ratioY = miniviewHeight / $parent[ 0 ].scrollHeight;
+				var mini = $( "<div></div>" ).addClass( "minimap-node" );
+				$minimap.append( mini );
+				var ratioX = minimapWidth / $mapSource[ 0 ].scrollWidth;
+				var ratioY = minimapHeight / $mapSource[ 0 ].scrollHeight;
 
 				var wM = $child.width() * ratioX;
 				var hM = $child.height() * ratioY;
-				var xM = ($child.position().left + $parent.scrollLeft()) * ratioX;
-				var yM = ($child.position().top + $parent.scrollTop()) * ratioY;
+				var xM = ($child.position().left + $mapSource.scrollLeft()) * ratioX;
+				var yM = ($child.position().top + $mapSource.scrollTop()) * ratioY;
 
 				mini.css( {
 					width : Math.round( wM ),

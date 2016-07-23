@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>jquery-miniview demo</title>
-		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
-		<script type="text/javascript" src="jquery-miniview.js"></script>
+		<title>jquery-minimap demo</title>
+		<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+		<script src="jquery-minimap.js"></script>
 		<style>
 			html, body {
 				margin: 0;
@@ -25,7 +25,7 @@
 				cursor: move;
 			}
 
-			#miniview {
+			#minimap {
 				position: fixed;
 				width: 125px;
 				height: 125px;
@@ -37,12 +37,12 @@
 				z-index: 1;
 			}
 
-			.mini {
+			.minimap-node {
 				position: absolute;
 				background-color: rgb(96, 122, 134);
 			}
 
-			.port {
+			.minimap-viewport {
 				position: absolute;
 				box-sizing: border-box;
 				background-color: rgba(79, 111, 126, 0.4);
@@ -53,14 +53,15 @@
 	</head>
 
 	<body>
-		<div id="miniview"></div>
+		<div id="minimap"></div>
 		<div id="parent"></div>
 
 		<script>
-			$( function () {
-				var $parent = $( "#parent" );
+			$(function () {
+				// First, lets build an interesting example of parent and child DOM elements...
 
 				// Add children to the parent.
+				var $parent = $( "#parent" );
 				var childrenFragment = document.createDocumentFragment();
 				var left = 0;
 				var top = 0;
@@ -73,7 +74,7 @@
 				}
 				$parent.append( childrenFragment );
 
-				// Allow children to be draggable. The position of the child will be updated in the miniview.
+				// Allow children to be draggable. The position of the child will be updated in the minimap.
 				var $children = $parent.find( '.child' );
 				$children.each( function () {
 					$( this ).draggable( {
@@ -82,9 +83,11 @@
 					} );
 				} );
 
-				// Initialize the miniview plugin.
-				$parent.miniview( $children );
-			} );
+
+				// Now invoke the minimap method on the element you'd like to become the minimap,
+				// passing a reference to the element you'd like the map to be based on.
+				$( "#minimap" ).minimap( $parent );
+			});
 		</script>
 	</body>
 </html>
