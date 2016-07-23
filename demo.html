@@ -37,12 +37,12 @@
 				z-index: 1;
 			}
 
-			.mini {
+			.minimap-node {
 				position: absolute;
 				background-color: rgb(96, 122, 134);
 			}
 
-			.port {
+			.minimap-viewport {
 				position: absolute;
 				box-sizing: border-box;
 				background-color: rgba(79, 111, 126, 0.4);
@@ -57,10 +57,11 @@
 		<div id="parent"></div>
 
 		<script>
-			$( function () {
-				var $parent = $( "#parent" );
+			$(function () {
+				// First, lets build an interesting example of parent and child DOM elements...
 
 				// Add children to the parent.
+				var $parent = $( "#parent" );
 				var childrenFragment = document.createDocumentFragment();
 				var left = 0;
 				var top = 0;
@@ -82,9 +83,11 @@
 					} );
 				} );
 
-				// Initialize the minimap plugin.
-				$parent.minimap( $children );
-			} );
+
+				// Now invoke the minimap method on the element you'd like to become the minimap,
+				// passing a reference to the element you'd like the map to be based on.
+				$( "#minimap" ).minimap( $parent );
+			});
 		</script>
 	</body>
 </html>
